@@ -66,7 +66,8 @@ if [[ $MODE -eq $MODE_RAW ]]; then
 fi
 
 # Put the URL on the clipboard if xclip is installed
-echo "$URL" | xclip
+echo "$URL" | xclip -selection clipboard
+echo "$URL" | xclip -selection primary
 
 # Print the URL
 echo "$URL"
