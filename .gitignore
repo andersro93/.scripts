@@ -1,1 +1,5 @@
+# The main configuration file
 config
+
+# The symlinked files in the path folder
+path
