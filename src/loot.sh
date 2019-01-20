@@ -10,8 +10,7 @@ readonly MODE_FILE="FILE"
 readonly AWS_S3_URL="https://s3.eu-north-1.amazonaws.com"
 
 # Detect the mode to use, file copying or pipeing
-if [[ $# -eq 0 ]]; then
-    read -r RAW_INPUT
+if [ -z "$1" ]; then
     MODE=$MODE_RAW
 else
     INPUT_FILE="$1"
@@ -34,28 +33,36 @@ fi
 RANDOM_FILENAME="$(cat /proc/sys/kernel/random/uuid)"
 
 # Determine which transfer mode to use
-if [[ $MODE -eq $MODE_FILE ]]; then
+if [[ $MODE = "$MODE_FILE" ]]; then
 
     # Get the filename and extension from the original path
     FILENAME="$INPUT_FILE"
     EXTENSION="$(echo "$FILENAME" | rev | cut -d '.' -f1 | rev )"
 
-elif [[ $MODE -eq $MODE_RAW ]]; then
+elif [[ $MODE = "$MODE_RAW" ]]; then
     
     # Create a tmp filepath
     EXTENSION="txt"
     FILENAME="/tmp/loot-tmp-$RANDOM_FILENAME.$EXTENSION"
 
-    # Write a tmp file
-    echo "$RAW_INPUT" > "$TMP_FILEPATH"
+    # Touch temp file
+    touch "$FILENAME"
 
+    # Write a tmp file
+    while read -r CMD; do
+        echo "$CMD" >> "$FILENAME"
+    done
+
+else
+    echo "Error: Invalid mode"
+    exit 1
 fi
 
 # Calculate the final path
 S3PATH="s3://$LOOT_S3_BUCKET_NAME/loot/$RANDOM_FILENAME.$EXTENSION"
 
 # Make the copying to the S3 Store
-aws s3 cp "$INPUT_FILE" "$S3PATH" --quiet
+aws s3 cp "$FILENAME" "$S3PATH" --quiet
 
 # Get the URL
 URL="$AWS_S3_URL/$LOOT_S3_BUCKET_NAME/loot/$RANDOM_FILENAME.$EXTENSION"
