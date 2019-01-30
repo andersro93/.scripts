@@ -7,7 +7,6 @@
 # Some readonly constants
 readonly MODE_RAW="RAW"
 readonly MODE_FILE="FILE"
-readonly AWS_S3_URL="https://s3.eu-north-1.amazonaws.com"
 
 # Detect the mode to use, file copying or pipeing
 if [ -z "$1" ]; then
@@ -59,13 +58,13 @@ else
 fi
 
 # Calculate the final path
-S3PATH="s3://$LOOT_S3_BUCKET_NAME/loot/$RANDOM_FILENAME.$EXTENSION"
+readonly S3PATH="s3://$LOOT_S3_BUCKET_NAME/loot/$RANDOM_FILENAME.$EXTENSION"
 
 # Make the copying to the S3 Store
 aws s3 cp "$FILENAME" "$S3PATH" --quiet
 
 # Get the URL
-URL="$AWS_S3_URL/$LOOT_S3_BUCKET_NAME/loot/$RANDOM_FILENAME.$EXTENSION"
+readonly URL="$LOOT_PUBLIC_URL/loot/$RANDOM_FILENAME.$EXTENSION"
 
 # Delete the tempromary file if raw mode was used
 if [[ $MODE -eq $MODE_RAW ]]; then

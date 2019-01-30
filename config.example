@@ -7,4 +7,19 @@
 # The S3 bucket name that will be used to calculate the S3 uri
 export LOOT_S3_BUCKET_NAME=""
 
+# The public url of the loot
+export LOOT_PUBLIC_URL="https://loot.ros-nett.com"
+
+#
+# Configuration for display modes
+#
+
+# Screen configuration for Mobile mode
+export DISPLAY_MODE_PARAMS_MOBILE=""
+
+# Screen configuration for Docked mode
+export DISPLAY_MODE_PARAMS_DOCKED=""
+
+# Screen configuration for Presentation mode
+export DISPLAY_MODE_PARAMS_PRESENTATION=""
 
