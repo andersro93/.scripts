@@ -16,18 +16,6 @@ else
     MODE=$MODE_FILE
 fi
 
-# Check if environment variable for S3 bucket uri is set
-if [[ -z "${LOOT_S3_BUCKET_NAME}" ]]; then
-    echo "Error: The S3 bucket environment variable is not set, please check that the environment file is loaded in bashrc" 1>&2
-    exit 1
-fi
-
-# Check if AWS cli is installed
-if [[ -z "$(type -p aws)" ]]; then
-    echo "Error: It dosen't look like AWS cli is installed or available, please check your configuration" 1>&2
-    exit 1
-fi
-
 # Retrieve an UUID that we can use for filename
 RANDOM_FILENAME="$(cat /proc/sys/kernel/random/uuid)"
 
@@ -57,14 +45,17 @@ else
     exit 1
 fi
 
+# Get the current year
+readonly YEAR=`date +"%Y"`
+
 # Calculate the final path
-readonly S3PATH="s3://$LOOT_S3_BUCKET_NAME/loot/$RANDOM_FILENAME.$EXTENSION"
+readonly REMOTE_FILE="$YEAR/$RANDOM_FILENAME.$EXTENSION"
 
 # Make the copying to the S3 Store
-aws s3 cp "$FILENAME" "$S3PATH" --quiet
+scp -q "$FILENAME" "$LOOT_REMOTE_SERVER:$LOOT_REMOTE_PATH/$REMOTE_FILE"
 
 # Get the URL
-readonly URL="$LOOT_PUBLIC_URL/loot/$RANDOM_FILENAME.$EXTENSION"
+readonly URL="$LOOT_PUBLIC_URL/$REMOTE_FILE"
 
 # Delete the tempromary file if raw mode was used
 if [[ $MODE -eq $MODE_RAW ]]; then

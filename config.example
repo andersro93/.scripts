@@ -4,11 +4,14 @@
 # Configuration for Loot
 #
 
-# The S3 bucket name that will be used to calculate the S3 uri
-export LOOT_S3_BUCKET_NAME=""
+# The ssh hostname or configuration name of the remote server
+export LOOT_REMOTE_SERVER=""
+
+# The path on the remote server
+export LOOT_REMOTE_PATH=""
 
 # The public url of the loot
-export LOOT_PUBLIC_URL="https://loot.ros-nett.com"
+export LOOT_PUBLIC_URL=""
 
 #
 # Configuration for display modes
