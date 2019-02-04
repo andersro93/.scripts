@@ -23,7 +23,7 @@ RANDOM_FILENAME="$(cat /proc/sys/kernel/random/uuid)"
 if [[ $MODE = "$MODE_FILE" ]]; then
 
     # Get the filename and extension from the original path
-    FILENAME="$INPUT_FILE"
+    FILENAME="$PWD/$INPUT_FILE"
     EXTENSION="$(echo "$FILENAME" | rev | cut -d '.' -f1 | rev )"
 
 elif [[ $MODE = "$MODE_RAW" ]]; then
@@ -52,7 +52,7 @@ readonly YEAR=`date +"%Y"`
 readonly REMOTE_FILE="$YEAR/$RANDOM_FILENAME.$EXTENSION"
 
 # Make the copying to the S3 Store
-scp -q "$FILENAME" "$LOOT_REMOTE_SERVER:$LOOT_REMOTE_PATH/$REMOTE_FILE"
+rsync --chmod=444 "$FILENAME" "$LOOT_REMOTE_SERVER:$LOOT_REMOTE_PATH/$REMOTE_FILE"
 
 # Get the URL
 readonly URL="$LOOT_PUBLIC_URL/$REMOTE_FILE"
