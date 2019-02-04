@@ -11,6 +11,7 @@
 readonly ACTION_UP="up"
 readonly ACTION_DOWN="down"
 readonly ACTION_MUTE="mute"
+readonly ACTION_MIC_MUTE="mic_mute"
 
 # Set some of the configuration variables
 readonly STEP=10
@@ -70,6 +71,14 @@ elif [ "$1" == "$ACTION_MUTE" ]; then
 
     # Notify the user
     notify-send 'Volume' --expire-time $TIMEOUT --urgency low -i audio-volume-muted "Toggling mute"
+
+elif [ "$1" == "$ACTION_MIC_MUTE" ]; then
+
+    # Toggle the default capture device
+    amixer set Capture toggle
+
+    # Notify the user
+    notify-send 'Volume' --expire-time $TIMEOUT --urgency low -i audio-volume-muted "Toggling mute for input device"
 
 else
     # Invalid action was specified
