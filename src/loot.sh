@@ -23,7 +23,7 @@ RANDOM_FILENAME="$(cat /proc/sys/kernel/random/uuid)"
 if [[ $MODE = "$MODE_FILE" ]]; then
 
     # Get the filename and extension from the original path
-    FILENAME="$PWD/$INPUT_FILE"
+    FILENAME="$INPUT_FILE"
     EXTENSION="$(echo "$FILENAME" | rev | cut -d '.' -f1 | rev )"
 
 elif [[ $MODE = "$MODE_RAW" ]]; then
