@@ -23,46 +23,42 @@ readonly VOL_OLD=$(amixer -D pulse sget Master | grep 'Left:' | awk -F'[][%]' '{
 if [ "$1" == "$ACTION_UP" ]; then
 
     # Calculate the next volume
-    readonly VOL_NEW=`expr $VOL_OLD + $STEP`
+    VOL_NEW=`expr $VOL_OLD + $STEP`
     
     # Check if we are above maximum
     if [ $VOL_NEW -ge 100 ]; then
 
-        # Set volume to 100 %
-        pactl set-sink-volume @DEFAULT_SINK@ 100%
+        # Set the new level to 100%
+        VOL_NEW=100
 
-        # Notify the user
-        notify-send 'Volume' --expire-time 2000 --urgency low --hint int:value:100 -i audio-volume-high 'Volume is now at maximum'
-
-    else
-        # Increase volume
-        pactl set-sink-volume @DEFAULT_SINK@ "$VOL_NEW%"
-
-        # Notify the user
-        notify-send 'Volume' --expire-time $TIMEOUT --urgency low --hint int:value:$VOL_NEW -i audio-volume-medium 'Turning the volume up'
     fi
+
+    # Set the volume
+    pactl set-sink-volume @DEFAULT_SINK@ "$VOL_NEW%"
+
+    # Notify the user
+    notify-send 'Volume' --expire-time $TIMEOUT --urgency low --hint int:value:$VOL_NEW -i audio-volume-medium 'Volume changed'
+ 
 
 elif [ "$1" == "$ACTION_DOWN" ]; then
 
     # Calculate the next volume
-    readonly VOL_NEW=`expr $VOL_OLD - $STEP`
+    VOL_NEW=`expr $VOL_OLD - $STEP`
 
     # Check if we are below 0
     if [ $VOL_NEW -le 0 ]; then
 
-        # Set volume to 0 %
-        pactl set-sink-volume @DEFAULT_SINK@ 0%
+        # Set the volume to 0
+        VOL_NEW=0
 
-        # Notify the user
-        notify-send 'Volume' --expire-time 2000 --urgency low --hint int:value:0 -i audio-volume-low 'Volume is now at minimum'
-
-    else
-        # Decrease the volume
-        pactl set-sink-volume @DEFAULT_SINK@ "$VOL_NEW%"
-
-        # Notify the user
-        notify-send 'Volume' --expire-time $TIMEOUT --urgency low --hint int:value:$VOL_NEW -i audio-volume-medium 'Turning the volume down'
     fi
+
+    # Set the volume
+    pactl set-sink-volume @DEFAULT_SINK@ "$VOL_NEW%"
+
+    # Notify the user
+    notify-send 'Volume' --expire-time $TIMEOUT --urgency low --hint int:value:$VOL_NEW -i audio-volume-medium 'Volume changed'
+ 
 
 elif [ "$1" == "$ACTION_MUTE" ]; then
 
