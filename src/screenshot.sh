@@ -16,17 +16,17 @@ readonly NOTIFICATION_DAEMON="notify-send"
 if [[ $# -eq 0 ]]; then
     
     # Take screenshot of entire screen(s)
-    scrot -z "$TMP_FILE"
+    maim -m 10 "$TMP_FILE"
 
 elif [[ $1 -eq "$MODE_SELECTION" ]]; then
 
     # Take screenshot of the selected area
-    scrot -s -z "$TMP_FILE"
+    maim -s -m 10 "$TMP_FILE"
 
 elif [[ $1 -eq "$MODE_WINDOW" ]]; then
 
     # Take screenshot of the current window
-    scrot -u -z "$TMP_FILE"
+    maim -i -m 10 "$TMP_FILE"
 else
 
     echo "Error: unknown mode was specified"
